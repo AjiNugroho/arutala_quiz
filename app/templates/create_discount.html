@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Discount Calculator</title>
+        <link href="/static/css/bootstrap.css" rel='stylesheet' type='text/css'/>
+    </head>
+    <body>
+        <div class="container">
+            <h2>Create Discount</h2>
+                <div class="form-group">
+                    <input type="text" id="product" name="product" class="form-control" placeholder="Product name" required>
+                </div>
+                
+               
+                <div class="form-group">
+                    <input class="form-control" id="price" type="number" min="1" step="any" placeholder="Price" required/>
+                </div>
+                <div class="form-group">
+                    <select id="dis_code">
+                        <option disabled selected>Discount Type</option>
+                        <option value=1>Fashion</option>
+                        <option value=2>Furniture</option>
+                        <option value=3>Jewelry</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary" onclick="create_data()">Create</button>
+                </div>
+        </div>
+
+ 
+    <script src="/static/js/jquery-3.5.1.js"></script>
+    <script src="/static/js/bootstrap.js"></script>
+
+    <script type="text/javascript">
+    async function postData(url = '', data = {}) {
+  
+    const response = await fetch(url, {
+    method: 'POST', // *GET, POST, PUT, DELETE, etc.
+    mode: 'cors', // no-cors, *cors, same-origin
+    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: 'same-origin', // include, *same-origin, omit
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    redirect: 'follow', // manual, *follow, error
+    referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    body: JSON.stringify(data) // body data type must match "Content-Type" header
+    });
+    
+    return response.json(); // parses JSON response into native JavaScript objects
+    }
+
+    function create_data(){
+
+        let product = document.getElementById('product').value;
+        let price = document.getElementById('price').value;
+        let sel = document.getElementById('dis_code');
+        let dis_code = sel.options[sel.selectedIndex].value;
+        postData('http://localhost:5000/arutala/save_dis', {'product':product,'price':price,'dis_code':dis_code })
+        .then(data => {
+        //console.log(data); // JSON data parsed by `data.json()` call
+        //window.alert(data.results)
+        if (data.results){
+            window.alert(data.results)
+
+        } else {
+            window.alert(data.error.message)
+        }
+        });
+
+    }
+
+
+    </script>
+
+
+    </body>
+</html>
